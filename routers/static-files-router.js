@@ -13,7 +13,6 @@ router.param('file', (req, res, next, file) => {
 });
 
 router.get('/async/:file', (req, res, next) => { 
-    console.log('IM HERE', process.cwd());
     fs.readFile(res.locals.filePath, (err, data) => {
         if (err) {
             return next(new HTTPError(404, 'Requested File Not Found'));
@@ -26,7 +25,7 @@ router.get('/async/:file', (req, res, next) => {
 router.get('/sync/:file', (req, res, next) => {
     try {
         const data = fs.readFileSync(res.locals.filePath);
-
+        
         res.set('Content-Type', res.locals.fileMimeType).send(data);
     } catch (e) {
         throw new HTTPError(404, 'Requested File Not Found');

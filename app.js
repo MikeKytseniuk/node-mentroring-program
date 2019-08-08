@@ -1,32 +1,10 @@
-const events = require('./events.json');
-const eventsDescription = require('./events-description.json');
 const express = require('express');
 const app = express();
-const staticFilesRouter = require('./static-files-router/static-files-router');
+const staticFilesRouter = require('./routers/static-files-router');
+const eventsRouter = require('./routers/events-router.js');
 const HTTPError = require('./HTTPError');
 
-const getEventsFullInfo = (events, eventsDescription) => {
-    return events.reduce((accum, event) => {
-        let { id: eventID, event: eventName} = event;
-        
-        let eventInfo = eventsDescription.find((eventDescription) => {
-            return eventDescription.id === eventID;
-        });
-
-        accum.push({
-            id: eventID,
-            event: eventName,
-            discovery: eventInfo || {}
-        });
-        
-        return accum;
-    }, []);
-};
-
-
-app.get('/', (req, res, next) => {
-    res.send(getEventsFullInfo(events, eventsDescription));
-});
+app.use('/', eventsRouter);
 
 app.use('/static', staticFilesRouter);
 
