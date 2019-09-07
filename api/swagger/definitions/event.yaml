@@ -1,0 +1,8 @@
+type: object
+properties:
+  id:
+    type: string
+  event:
+    type: string
+  discovery:
+    "$ref": "./event-description.yaml"

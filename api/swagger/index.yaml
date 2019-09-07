@@ -1,0 +1,86 @@
+swagger: '2.0'
+basePath: '/'
+host: localhost:3050
+schemes:
+- http
+info:
+  title: Node Practice API
+  version: 1.0.0
+parameters:
+  fileNameParam:
+    in: path
+    name: fileName
+    type: string
+    required: true
+    description: File name to get
+responses:
+  ImageResponse:
+    description: A static image
+    schema:
+      type: string
+      format: binary
+  FileNotFoundError:
+    description: Requested File Not Found
+definitions:
+  Event:
+    $ref: './definitions/event.yaml'
+paths:
+  '/':
+    get:
+      summary: Returns a list of events.
+      operationId: getEventsFullInfo
+      description: ''
+      responses:
+        '200':
+          description: Returns events full info
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Event'
+        '500':
+          description: Database error
+  '/static/async/{fileName}':
+    get:
+      summary: Returns file asynchronous
+      operationId: getFileAsync
+      produces:
+      - image/png
+      - image/gif
+      - image/jpeg
+      parameters:
+      - $ref: '#/parameters/fileNameParam'
+      responses:
+        '200':
+          $ref: '#/responses/ImageResponse'
+        '404':
+          $ref: '#/responses/FileNotFoundError'
+  '/static/sync/{fileName}':
+    get:
+      summary: Returns a file synchronous
+      operationId: getFileSync
+      produces:
+      - image/png
+      - image/gif
+      - image/jpeg
+      parameters:
+      - $ref: '#/parameters/fileNameParam'
+      responses:
+        '200':
+          $ref: '#/responses/ImageResponse'
+        '404':
+          $ref: '#/responses/FileNotFoundError'
+  '/static/stream/{fileName}':
+    get:
+      summary: Returns a file by chunks
+      operationId: getFileViaStreams
+      produces:
+      - image/png
+      - image/gif
+      - image/jpeg
+      parameters:
+      - $ref: '#/parameters/fileNameParam'
+      responses:
+        '200':
+          $ref: '#/responses/ImageResponse'
+        '404':
+          $ref: '#/responses/FileNotFoundError'

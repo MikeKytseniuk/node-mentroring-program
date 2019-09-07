@@ -1,0 +1,2 @@
+mongoimport --host mongo --db testDB --collection events --type json --file ./collections/events.json --drop --jsonArray; 
+mongoimport --host mongo --db testDB --collection events-description --type json --file ./collections/events-description.json --drop --jsonArray
